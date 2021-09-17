@@ -65,3 +65,23 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
+   
+from django.core.email import send_mail
+from django.contrib.auth.models import User
+
+# add send e-mail confirmation
+# set up the subject, message, and user's email address
+
+subject = '{} Locallibrary email confirmation'.format
+message = 'Please confirm your email below "{}"'.format
+
+user = request.user #request was passed to the method as a parameter for the view
+user_email = user.email # pull user's email out of the user record
+
+# try to send the e-mail - note you can send to multiple users - this just sends
+# to one user.
+try:
+    send_mail(subject, message, 'minhvuvlbay@gmail.com', [user_email])
+    send = True
+except:
+    print("Error sending e-mail")
